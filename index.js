@@ -1,17 +1,11 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import twilio from 'twilio';
-import basicAuth from 'basic-auth';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const express = require('express');
+const bodyParser = require('body-parser');
+const twilio = require('twilio');
+const basicAuth = require('basic-auth');
+const dotenv = require('dotenv');
+const path = require('path');
 
-// Load environment variables
 dotenv.config();
-
-// Fix for __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,7 +23,7 @@ const auth = function (req, res, next) {
   next();
 };
 
-// WhatsApp templates
+// Templates
 const templates = {
   template1: {
     sid: 'HXfdd745d857c424132a907d9ee57d2f46',
@@ -45,13 +39,11 @@ const templates = {
   },
 };
 
-// Protect access to static HTML page
+// Protect the static folder with basic auth
 app.use('/', auth, express.static(path.join(__dirname, 'public')));
 
-// Twilio client
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// Endpoint to send WhatsApp message
 app.post('/send-message', async (req, res) => {
   const { to, template } = req.body;
 
@@ -74,7 +66,6 @@ app.post('/send-message', async (req, res) => {
   }
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
