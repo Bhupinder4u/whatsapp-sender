@@ -13,8 +13,11 @@ app.use(bodyParser.json());
 // Basic auth middleware
 const auth = function (req, res, next) {
   const user = basicAuth(req);
-  const username = process.env.AUTH_USER;
-  const password = process.env.AUTH_PASS;
+  const username = 'pogoadmin';
+  const password = 'StrongPogo@initiate';
+
+  console.log('Auth user env:', username);
+  console.log('Auth pass env:', password);
 
   if (!user || user.name !== username || user.pass !== password) {
     res.set('WWW-Authenticate', 'Basic realm="Restricted Area"');
