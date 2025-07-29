@@ -13,8 +13,8 @@ app.use(bodyParser.json());
 // Basic auth middleware
 const auth = function (req, res, next) {
   const user = basicAuth(req);
-  const username = 'pogoadmin';
-  const password = 'StrongPogo@initiate';
+  const username = process.env.AUTH_USER;
+  const password = process.env.AUTH_PASS;
 
   console.log('Auth user env:', username);
   console.log('Auth pass env:', password);
