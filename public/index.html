@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Send WhatsApp Message</title>
+</head>
+<body>
+  <h2>Send WhatsApp Message</h2>
+  <form id="whatsappForm">
+    <label for="number">Customer Phone Number:</label><br />
+    <input type="text" id="number" placeholder="+919999999999" required /><br /><br />
+
+    <label for="template">Select Template:</label><br />
+    <select id="template" required>
+      <option value="">-- Select Template --</option>
+      <option value="template1">Review Request</option>
+      <option value="template2">Test1</option>
+      <option value="template3">Test2</option>
+    </select><br /><br />
+
+    <button type="submit">Send Message</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+    const form = document.getElementById('whatsappForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const to = document.getElementById('number').value;
+      const template = document.getElementById('template').value;
+
+      const res = await fetch('/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to, template })
+      });
+
+      const data = await res.json();
+      document.getElementById('response').innerText = data.success
+        ? '✅ Message sent successfully!'
+        : '❌ Failed: ' + data.error;
+    });
+  </script>
+</body>
+</html>
